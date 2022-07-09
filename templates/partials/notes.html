@@ -1,0 +1,156 @@
+<div class="notes">
+    <h4 class="title text-dark px-3 py-2">Notes</h4>
+    <div class="notes-holder">
+        {% if notes %}
+        <!-- ========================= NOTE ========================= -->
+        {% for note in notes %}
+        <div class="note py-2 px-3">
+            <div class="d-flex flex-wrap justify-content-end align-items-center">
+
+                {% if note.is_done %}
+                <span class="col text-secondary">
+                    <del>
+                        {{note.note}}
+                    </del>
+                </span>
+                {% else %}
+                <span class="col">
+                    {{note.note}}<br>
+                    <small>
+                        <small>
+                            <small>
+                                {{note.task.task|truncatechars:10}}
+                                <i class="fa fa-chevron-right mx-1"></i>
+                                {% if note.task.project %}
+                                {{note.task.project|truncatechars:10}}
+                                {% else %}
+                                __ __ __
+                                {% endif %}
+                            </small>
+                        </small>
+                    </small>
+                </span>
+                {% endif %}
+                <i class="fa fa-{% if note.is_done %}check{% else %}times{% endif %}
+                text-secondary btn py-1 check_note"></i>
+
+                <form action="{% url 'update_notes' note.id %}" method="post" class="d-flex">
+                    {% csrf_token %}
+                    {{update_notes_form}}
+                    <div class="d-none is_done">{% if note.is_done %}checked{% else %}unchecked{% endif %}</div>
+                </form>
+
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="d-flex justify-content-center align-items-center no_notes">
+            <div class="text-center">
+                <i class="fa fa-file fa-5x mt-3"></i>
+                <p class="text-secondary">There are no notes.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <form action="{% url 'add_note' %}" method="post" class="add_note col-12 active">
+        {% csrf_token %}
+        <div class="col-12 d-flex mt-3">
+            <div class="col">{{add_note_form.note}}</div>
+            <div class="col-4 p-2">
+                {{add_note_form.task}}
+            </div>
+            <button type="submit" class="btn btn-outline-dark"><i class="fa fa-plus"></i></button>
+        </div>
+    </form>
+    
+    {% if selected_task %}
+    <form action="{% url 'add_note2' selected_task.id %}" method="post" class="add_note col-12">
+        {% csrf_token %}
+        <div class="col-12 d-flex mt-3">
+            {{add_note_form2.note}}
+            <button type="submit" class="btn btn-outline-dark"><i class="fa fa-plus"></i></button>
+        </div>
+    </form>
+    {% endif %}
+        
+</div>
+
+
+<style>
+    .notes {
+        border-radius: 5px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 0 5px #ccc;
+    }
+
+    .notes .title {
+        background: #f5f5f5;
+    }
+
+    .notes-holder {
+        min-height: 40vh;
+        max-height: 60vh;
+        overflow-y: scroll;
+    }
+
+    .notes-holder::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .notes select{
+        width: 100% !important;
+        border: none !important;
+    }
+
+    .notes-holder::-webkit-scrollbar-thumb {
+        background: #aaa;
+    }
+
+    .notes-holder .no_notes {
+        height: 40vh;
+    }
+
+    .notes-holder .no_notes i {
+        color: #eee;
+    }
+
+    .notes button[type="submit"] {
+        border-radius: 0 0 5px 0;
+    }
+
+    .add_note {
+        display: none;
+    }
+
+    .add_note.active {
+        display: block;
+    }
+</style>
+
+
+<script>
+    $(document).ready(() => {
+        $("input[type='checkbox'].is_done_with_note").change((e) => {
+            $(e.target.parentElement).submit()
+        })
+        if (window.location.pathname == "/projects/") {
+            $(".add_note").removeClass("active")
+        } else {
+            if (window.location.pathname.split("notes").length > 1) {
+                $(".notes select").addClass("d-none")
+                $(".add_note").toggleClass("active")
+            }
+        }
+
+        let is_done = $(".is_done")
+        for (let i = 0; i < is_done.length; i++) {
+            if (is_done[i].textContent == "checked") {
+                is_done[i].parentElement.children[1].checked = true
+            } else if (is_done[i].textContent == "unchecked") {
+                is_done[i].parentElement.children[1].checked = false
+            }
+            //console.log(is_done[i].textContent)
+        }
+    })
+</script>

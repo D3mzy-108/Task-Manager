@@ -1,0 +1,53 @@
+<nav class="navbar bg-white col-12 p-0" id="nav1">
+    <ul class="p-0 m-0 col-12 d-flex d-lg-block">
+        <li class="nav-item col col-lg-12"><a href="{% url 'home' %}" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-list me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">All Tasks</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'today' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-calendar-check me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Today</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'tomorrow' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-calendar me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Tomorrow</span></a></li>
+        <li class="nav-item col col-lg-12 search-link"><label for="search" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-search me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Search</span></label></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'overdue' %}" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-info-circle me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Overdue</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'projects' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-folder me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Projects</span></a></li>
+    </ul>
+</nav>
+
+<nav class="navbar bg-white col-12 p-0 mt-3" id="nav2">
+    <ul class="p-0 m-0 col-12 d-flex d-lg-block">
+        <li class="nav-item col col-lg-12"><a href="#" class="nav-link text-dark d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_task"><i class="far fa-plus fs-5 me-2 me-lg-4"></i><span class="d-none d-md-block me-1">Add</span>Tasks</a></li>
+        <li class="nav-item col col-lg-12"><a href="#" class="nav-link text-dark d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#add_project"><i class="far fa-plus fs-5 me-2 me-lg-4"></i><span class="d-none d-md-block me-1">Add</span>Project</a></li>
+    </ul>
+</nav>
+
+
+<style>
+    li{
+        list-style: none;
+    }
+    nav{
+        box-shadow: 0 0 5px #bbb;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .nav-item.active{
+        background: #f1f1f1;
+    }
+</style>
+
+<script>
+    if(window.location.pathname == "/"){
+        $("#nav1 .nav-item:first-child").addClass("btn-secondary active").removeClass("btn-light")
+    }else if(window.location.pathname == "/today/"){
+        $("#nav1 .nav-item:nth-child(2)").addClass("btn-secondary active").removeClass("btn-light")
+    }else if(window.location.pathname == "/tomorrow/"){
+        $("#nav1 .nav-item:nth-child(3)").addClass("btn-secondary active").removeClass("btn-light")
+    }else if(window.location.pathname == "/overdue/"){
+        $("#nav1 .nav-item:nth-child(5)").addClass("btn-secondary active").removeClass("btn-light")
+    }else if(window.location.pathname == "/projects/"){
+        $("#nav1 .nav-item:last-child").addClass("btn-secondary active").removeClass("btn-light")
+    }
+
+    $(".search-link").click(() => {
+        $("#search-form").submit()
+    })
+    if(window.location.pathname.split("search").length > 1){
+        $("#nav1 .nav-item:nth-child(4)").addClass("btn-secondary active").removeClass("btn-light")
+    }
+</script>

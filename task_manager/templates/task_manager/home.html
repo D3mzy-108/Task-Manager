@@ -1,0 +1,410 @@
+{% extends 'base.html' %}
+{% block title %}Task Manager{% endblock title %}
+
+{% block main %}
+
+
+{% if tasks %}
+{% for task in tasks %}
+<div class="card col-12 border-0 mb-3 task">
+    <div class="title d-flex px-3 pb-2 pt-3">
+        <form action="{% url 'update_task' task.id %}">
+            {% csrf_token %}
+            <input type="checkbox" name="check{{task.id}}" id="check{{task.id}}" class="me-3"
+                {% if task.status %}checked{% endif %}>
+        </form>
+        <span class="text-dark">{{task.task}}</span>
+        <a href="#" class="edit ms-auto" data-bs-toggle="modal" data-bs-target="#edit_task{{task.id}}"><i class="fa fa-pencil text-secondary"></i></a>
+    </div>
+    <div class="dates d-flex px-3 py-2">
+        <span class="text-secondary">{{task.start_date}}</span><span class="text-dark px-2">-></span><span
+            class="text-secondary">{{task.end_date}}</span>
+        <a href="{% url 'notes' task.id %}" class="ms-auto"><i class="fa fa-file text-secondary"></i></a>
+    </div>
+    <div class="project d-flex">
+
+        {% if task.project %}
+        <a href="{% url 'project_tasks' task.project.id %}" class="text-secondary text-decoration-none px-3 py-2"><i
+                class="fa fa-folder me-2"></i> {{task.project}}</a>
+        {% else %}
+        <span class="text-secondary px-3 py-2"><i class="fa fa-folder me-2"></i> _____</span>
+        {% endif %}
+
+        <a href="#" class="ms-auto px-3 py-2 delete_btn" data-bs-toggle="modal" data-bs-target="#delete_task{{task.id}}"><i
+                class="fa fa-trash text-secondary"></i></a>
+    </div>
+</div>
+
+
+<!-- ================================== EDIT TASK ================================= -->
+<div class="modal edit_task" tabindex="-1" id="edit_task{{task.id}}">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{% url 'edit_task' task.id %}" method="post" class="modal-content">
+            {% csrf_token %}
+            <div class="p-3 pb-0 d-flex">
+                <h5 class="modal-title">Edit Task</h5>
+                <a href="#" class="btn ms-auto" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times fs-5"></i></a>
+            </div>
+            <div class="title d-flex px-3 pb-2 pt-3">
+                {{add_task_form.task}}
+            </div>
+            <div class="dates d-flex px-3 py-2">
+                <span class="text-secondary">{{add_task_form.start_date}}</span><span
+                    class="text-dark px-2">-</span><span class="text-secondary">{{add_task_form.end_date}}</span>
+            </div>
+            <div class="project d-flex">
+                <span class="d-flex px-3 py-2 align-items-center text-secondary">
+                    <i class="fa fa-folder me-2"></i> {{task.project}}
+                </span>
+                <button type="submit" class="btn ms-auto">Save <i class="fa fa-save"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- =============================== DELETE TASK ================================= -->
+<div class="modal" tabindex="-1" id="delete_task{{task.id}}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "{{task.task}}".</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <a href="{% url 'delete_task' task.id %}" class="btn btn-danger">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+{% if projects %}
+{% for project in projects %}
+<div class="card col-12 border-0 mb-3 project_card">
+    <div class="title d-flex px-3 pb-2 pt-3">
+        <span class="text-dark">{{project.project}}</span>
+        <a href="#" class="edit ms-auto" data-bs-toggle="modal" data-bs-target="#edit_project{{project.id}}"><i class="fa fa-pencil text-secondary"></i></a>
+    </div>
+    <div class="dates d-flex px-3 py-2">
+        <span class="text-secondary">{{project.start_date}}</span><span class="text-dark px-2">-></span><span
+            class="text-secondary">{{project.end_date}}</span>
+        <a href="#" class="ms-auto" data-bs-toggle="modal" data-bs-target="#add_task{{project.id}}"><i class="fa fa-plus text-secondary" title="Add task"></i></a>
+    </div>
+    <div class="project d-flex">
+        <a href="{% url 'project_tasks' project.id %}" class="text-secondary text-decoration-none px-3 py-2"><i
+                class="fa fa-list me-2"></i> {{done_tasks}}/{{project.tasks.count}} tasks completed</a>
+
+        <a href="#" class="ms-auto px-3 py-2 delete_btn" data-bs-toggle="modal" data-bs-target="#delete_project{{project.id}}"><i
+                class="fa fa-trash text-secondary"></i></a>
+    </div>
+</div>
+
+
+<!-- ======================== ADD TASK DIRECTLY TO PROJECT ========================= -->
+<div class="modal" tabindex="-1" id="add_task{{project.id}}">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{% url 'add_task2' project.id %}" method="post" class="modal-content">
+            {% csrf_token %}
+            <div class="p-3 pb-0 d-flex">
+                <h5 class="modal-title">Add Task</h5>
+                <a href="#" class="btn ms-auto" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times fs-5"></i></a>
+            </div>
+            <div class="title d-flex px-3 pb-2 pt-3">
+                {{add_task_form.task}}
+            </div>
+            <div class="dates d-flex px-3 py-2">
+                <span class="text-secondary">{{add_task_form.start_date}}</span><span
+                    class="text-dark px-2">-</span><span class="text-secondary">{{add_task_form.end_date}}</span>
+            </div>
+            <div class="project d-flex">
+                <span class="d-flex px-3 py-2 align-items-center">
+                    <i class="fa fa-folder me-2"></i> {{project.project}}
+                </span>
+                <button type="submit" class="btn ms-auto">Save <i class="fa fa-save"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ================================== EDIT PROJECT =============================== -->
+<div class="modal edit_project" tabindex="-1" id="edit_project{{project.id}}">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{% url 'edit_project' project.id %}" method="post" class="modal-content">
+            {% csrf_token %}
+            <div class="p-3 pb-0 d-flex">
+                <h5 class="modal-title">Add Project</h5>
+                <a href="#" class="btn ms-auto" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times fs-5"></i></a>
+            </div>
+            <div class="title d-flex px-3 pb-2 pt-3">
+                {{add_project_form.project}}
+            </div>
+            <div class="dates d-flex px-3 py-2">
+                <span class="text-secondary">{{add_project_form.start_date}}</span><span
+                    class="text-dark px-2">-</span><span class="text-secondary">{{add_project_form.end_date}}</span>
+            </div>
+            <div class="project d-flex">
+                <button type="submit" class="btn ms-auto">Save <i class="fa fa-save"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- =============================== DELETE PROJECT ================================= -->
+<div class="modal" tabindex="-1" id="delete_project{{project.id}}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "{{project.project}}".</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <a href="{% url 'delete_project' project.id %}" class="btn btn-danger">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+<!-- ================================== ADD PROJECT ================================= -->
+<div class="modal" tabindex="-1" id="add_project">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{% url 'add_project' %}" method="post" class="modal-content">
+            {% csrf_token %}
+            <div class="p-3 pb-0 d-flex">
+                <h5 class="modal-title">Add Project</h5>
+                <a href="#" class="btn ms-auto" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times fs-5"></i></a>
+            </div>
+            <div class="title d-flex px-3 pb-2 pt-3">
+                {{add_project_form.project}}
+            </div>
+            <div class="dates d-flex px-3 py-2">
+                <span class="text-secondary">{{add_project_form.start_date}}</span><span
+                    class="text-dark px-2">-</span><span class="text-secondary">{{add_project_form.end_date}}</span>
+            </div>
+            <div class="project d-flex">
+                <button type="submit" class="btn ms-auto">Save <i class="fa fa-save"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==================================== ADD TASK ================================== -->
+<div class="modal" tabindex="-1" id="add_task">
+    <div class="modal-dialog modal-dialog-centered">
+        <form action="{% url 'add_task' %}" method="post" class="modal-content">
+            {% csrf_token %}
+            <div class="p-3 pb-0 d-flex">
+                <h5 class="modal-title">Add Task</h5>
+                <a href="#" class="btn ms-auto" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times fs-5"></i></a>
+            </div>
+            <div class="title d-flex px-3 pb-2 pt-3">
+                {{add_task_form.task}}
+            </div>
+            <div class="dates d-flex px-3 py-2">
+                <span class="text-secondary">{{add_task_form.start_date}}</span><span
+                    class="text-dark px-2">-</span><span class="text-secondary">{{add_task_form.end_date}}</span>
+            </div>
+            <div class="project d-flex">
+                <span class="d-flex px-3 py-2 align-items-center">
+                    <i class="fa fa-folder me-2"></i> {{add_task_form.project}}
+                </span>
+                <button type="submit" class="btn ms-auto">Save <i class="fa fa-save"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<style>
+    .card,
+    .modal-content {
+        overflow: hidden;
+        box-shadow: 0 0 8px #ddd;
+        border-radius: 8px;
+    }
+
+    .project {
+        background: #f5f5f5;
+    }
+
+    form select{
+        border: none !important;
+        background: none !important;
+        outline: none !important;
+    }
+    .edit i.fa-pencil{
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    $(".card input[type='checkbox']").click((e) => {
+        $(e.target.parentElement).submit()
+    })
+    if (window.location.pathname.split("notes").length > 1) {
+        $(".delete_btn").addClass("d-none")
+    }
+    $(".task .edit").click((e) => {
+        $(".edit_task #id_task").val(e.target.parentElement.children[1].textContent)
+        let date_array = e.target.parentElement.parentElement.children[1].children[0].textContent.split(" ")
+        let month = 0
+        if (date_array[0] == "Jan."){
+            month = "01"
+        }else if (date_array[0] == "Feb."){
+            month = "02"
+        }else if (date_array[0] == "Mar."){
+            month = "03"
+        }else if (date_array[0] == "April"){
+            month = "04"
+        }else if (date_array[0] == "May"){
+            month = "05"
+        }else if (date_array[0] == "June"){
+            month = "06"
+        }else if (date_array[0] == "July"){
+            month = "07"
+        }else if (date_array[0] == "Aug."){
+            month = "08"
+        }else if (date_array[0] == "Sept."){
+            month = "09"
+        }else if (date_array[0] == "Oct."){
+            month = "10"
+        }else if (date_array[0] == "Nov."){
+            month = "11"
+        }else if (date_array[0] == "Dec."){
+            month = "12"
+        }
+        let day = 0
+        if (date_array[1].split(",")[0] < 10){
+            day = "0"+date_array[1].split(",")[0]
+        }else{
+            day = date_array[1].split(",")[0]
+        }
+        let year = date_array[2]
+        $(".edit_task #id_start_date").val(year+"-"+month+"-"+day)
+
+
+        date_array = e.target.parentElement.parentElement.children[1].children[2].textContent.split(" ")
+        if (date_array[0] == "Jan."){
+            month = "01"
+        }else if (date_array[0] == "Feb."){
+            month = "02"
+        }else if (date_array[0] == "Mar."){
+            month = "03"
+        }else if (date_array[0] == "April"){
+            month = "04"
+        }else if (date_array[0] == "May"){
+            month = "05"
+        }else if (date_array[0] == "June"){
+            month = "06"
+        }else if (date_array[0] == "July"){
+            month = "07"
+        }else if (date_array[0] == "Aug."){
+            month = "08"
+        }else if (date_array[0] == "Sept."){
+            month = "09"
+        }else if (date_array[0] == "Oct."){
+            month = "10"
+        }else if (date_array[0] == "Nov."){
+            month = "11"
+        }else if (date_array[0] == "Dec."){
+            month = "12"
+        }
+        if (date_array[1].split(",")[0] < 10){
+            day = "0"+date_array[1].split(",")[0]
+        }else{
+            day = date_array[1].split(",")[0]
+        }
+        year = date_array[2]
+        $(".edit_task #id_end_date").val(year+"-"+month+"-"+day)
+    })
+
+
+    $(".project_card .edit").click((e) => {
+        $(".edit_project #id_project").val(e.target.parentElement.children[0].textContent)
+        let date_array = e.target.parentElement.parentElement.children[1].children[0].textContent.split(" ")
+        let month = 0
+        if (date_array[0] == "Jan."){
+            month = "01"
+        }else if (date_array[0] == "Feb."){
+            month = "02"
+        }else if (date_array[0] == "Mar."){
+            month = "03"
+        }else if (date_array[0] == "April"){
+            month = "04"
+        }else if (date_array[0] == "May"){
+            month = "05"
+        }else if (date_array[0] == "June"){
+            month = "06"
+        }else if (date_array[0] == "July"){
+            month = "07"
+        }else if (date_array[0] == "Aug."){
+            month = "08"
+        }else if (date_array[0] == "Sept."){
+            month = "09"
+        }else if (date_array[0] == "Oct."){
+            month = "10"
+        }else if (date_array[0] == "Nov."){
+            month = "11"
+        }else if (date_array[0] == "Dec."){
+            month = "12"
+        }
+        let day = 0
+        if (date_array[1].split(",")[0] < 10){
+            day = "0"+date_array[1].split(",")[0]
+        }else{
+            day = date_array[1].split(",")[0]
+        }
+        let year = date_array[2]
+        $(".edit_project #id_start_date").val(year+"-"+month+"-"+day)
+
+
+        date_array = e.target.parentElement.parentElement.children[1].children[2].textContent.split(" ")
+        if (date_array[0] == "Jan."){
+            month = "01"
+        }else if (date_array[0] == "Feb."){
+            month = "02"
+        }else if (date_array[0] == "Mar."){
+            month = "03"
+        }else if (date_array[0] == "April"){
+            month = "04"
+        }else if (date_array[0] == "May"){
+            month = "05"
+        }else if (date_array[0] == "June"){
+            month = "06"
+        }else if (date_array[0] == "July"){
+            month = "07"
+        }else if (date_array[0] == "Aug."){
+            month = "08"
+        }else if (date_array[0] == "Sept."){
+            month = "09"
+        }else if (date_array[0] == "Oct."){
+            month = "10"
+        }else if (date_array[0] == "Nov."){
+            month = "11"
+        }else if (date_array[0] == "Dec."){
+            month = "12"
+        }
+        if (date_array[1].split(",")[0] < 10){
+            day = "0"+date_array[1].split(",")[0]
+        }else{
+            day = date_array[1].split(",")[0]
+        }
+        year = date_array[2]
+        $(".edit_project #id_end_date").val(year+"-"+month+"-"+day)
+    })
+</script>
+{% endblock main %}

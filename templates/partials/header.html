@@ -1,0 +1,22 @@
+<header class="col-12 py-2 px-3 px-md-4">
+    <div class="d-flex col-12">
+        <i class="fas fa-check-square fa-2x text-secondary"></i>
+
+        <form action="{% url 'search' %}" method="get" class="col search-form" id="search-form">
+            <div class="d-flex col-9 bg-light mx-auto">
+                <input type="search" name="search" id="search" class="form-control bg-light border-0 col" placeholder="Search">
+                <button type="submit" class="btn btn-light"><i class="fa fa-search text-secondary"></i></button>
+            </div>
+        </form>
+    </div>
+</header>
+
+
+<style>
+    header{
+        background: #f1f1f1;
+    }
+    form.search-form input:focus{
+        box-shadow: none;
+    }
+</style>

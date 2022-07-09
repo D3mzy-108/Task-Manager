@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{details.task}}
+{% endblock title %}
+
+
+{% block main %}
+    <div class="content_wrapper col-12 p-1 p-md-0 d-flex justify-content-center align-items-center">
+        <div class="details-holder col col-md-8">
+            <div class="heading d-flex justify-content-between p-2 align-items-center">
+                <h6 class="mt-2">{{details.task}}</h6>
+                <div class="d-flex">
+                    <a href="{% url 'update_task' details.id %}">
+                        <button type="button" class="btn text-primary" style="padding: 0 auto !important;"><i class="fas fa-pen-to-square"></i></button>
+                    </a>
+                    <button type="button" class="btn text-danger delete-btn" style="padding: 0 auto !important;"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="body p-2">
+                <small><small>{{details.deadline}}</small></small>
+                <hr>
+                <p>{{details.task_description}}</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Popup Dialog -->
+    <div class="dialog-holder fixed-top">
+        <div class="dialog px-3 bg-light">
+            <div class="dialog-header col-12 py-3">
+            </div>
+            <div class="dialog-body col-12 py-3">
+                <p>Are you sure you want to delete "{{details.task}}" from the list of venues?</p>
+            </div>
+            <div class="dialog-footer col-12 d-flex py-3">
+                <button type="button" id="cancel-delete" class="btn btn-secondary col me-1">No</button>
+                <button type="button" id="verify_delete" class="btn btn-danger col ms-1">
+                    <a href="{% url 'delete_task' details.id %}" style="color: white !important;">Yes</a>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    
+    {% for task in tasks %}
+    <div class="d-none check_completed">{{task.completed}}</div>
+    <div class="date d-none">{{task.deadline}}</div>
+    {% endfor %}
+        
+{% endblock main %}
+    
+
+    
