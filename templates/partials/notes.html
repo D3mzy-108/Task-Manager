@@ -20,7 +20,7 @@
                         <small>
                             <small>
                                 {{note.task.task|truncatechars:10}}
-                                <i class="fa fa-chevron-right mx-1"></i>
+                                <span class="mx-1">/</span>
                                 {% if note.task.project %}
                                 {{note.task.project|truncatechars:10}}
                                 {% else %}
@@ -85,7 +85,7 @@
     }
 
     .notes .title {
-        background: #f5f5f5;
+        background: #f1f1f1;
     }
 
     .notes-holder {

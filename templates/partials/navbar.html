@@ -1,11 +1,11 @@
 <nav class="navbar bg-white col-12 p-0" id="nav1">
     <ul class="p-0 m-0 col-12 d-flex d-lg-block">
-        <li class="nav-item col col-lg-12"><a href="{% url 'home' %}" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-list me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">All Tasks</span></a></li>
-        <li class="nav-item col col-lg-12"><a href="{% url 'today' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-calendar-check me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Today</span></a></li>
-        <li class="nav-item col col-lg-12"><a href="{% url 'tomorrow' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-calendar me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Tomorrow</span></a></li>
-        <li class="nav-item col col-lg-12 search-link"><label for="search" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-search me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Search</span></label></li>
-        <li class="nav-item col col-lg-12"><a href="{% url 'overdue' %}" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-info-circle me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Overdue</span></a></li>
-        <li class="nav-item col col-lg-12"><a href="{% url 'projects' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-folder me-2 me-lg-4 text-secondary"></i> <span class="d-none d-md-block">Projects</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'home' %}" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-list me-2 me-lg-4"></i> <span class="d-none d-md-block">All Tasks</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'today' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-calendar-check me-2 me-lg-4"></i> <span class="d-none d-md-block">Today</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'tomorrow' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-calendar me-2 me-lg-4"></i> <span class="d-none d-md-block">Tomorrow</span></a></li>
+        <li class="nav-item col col-lg-12 search-link"><label for="search" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-search me-2 me-lg-4"></i> <span class="d-none d-md-block">Search</span></label></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'overdue' %}" class="nav-link text-dark d-flex align-items-center"><i class="fa fa-info-circle me-2 me-lg-4"></i> <span class="d-none d-md-block">Overdue</span></a></li>
+        <li class="nav-item col col-lg-12"><a href="{% url 'projects' %}" class="nav-link text-dark d-flex align-items-center"><i class="far fa-folder me-2 me-lg-4"></i> <span class="d-none d-md-block">Projects</span></a></li>
     </ul>
 </nav>
 
@@ -28,6 +28,9 @@
     }
     .nav-item.active{
         background: #f1f1f1;
+    }
+    #nav1 i.fa, #nav1 i.far, #nav2 i.fa, #nav2 i.far{
+        color: #4256B5;
     }
 </style>
 

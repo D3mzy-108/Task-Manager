@@ -67,6 +67,9 @@
         .filters a.btn {
             box-shadow: 1px 2px 2px #ddd;
         }
+        .filters a.btn.active{
+            background: #4256B5;
+        }
     </style>
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.1/js/bootstrap.bundle.min.js"
@@ -76,9 +79,9 @@
     <script>
         $(document).ready(() => {
             if (window.location.pathname == "/projects/") {
-                $(".filters a.btn:nth-child(2)").addClass("btn-secondary active").removeClass("btn-light").css("pointer-events","none")
+                $(".filters a.btn:nth-child(2)").addClass("text-light active").removeClass("btn-light").css("pointer-events","none")
             } else {
-                $(".filters a.btn:nth-child(1)").addClass("btn-secondary active").removeClass("btn-light").css("pointer-events","none")
+                $(".filters a.btn:nth-child(1)").addClass("text-light active").removeClass("btn-light").css("pointer-events","none")
             }
         })
     </script>
