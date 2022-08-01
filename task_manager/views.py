@@ -95,14 +95,6 @@ def project(request):
     notes = Note.objects.all()
     update_notes_form = UpdateNoteForm()
 
-    done_tasks = 0
-
-    for project in projects:
-        tasks = Task.objects.all().filter(project=project)
-        for task in tasks:
-            if task.status:
-                done_tasks += 1
-
     context = {
         "projects": projects,
         "notes": notes,
@@ -143,14 +135,6 @@ def search(request):
         notes = Note.objects.all()
         update_notes_form = UpdateNoteForm()
         projects = Project.objects.filter(project__contains=search)
-
-        done_tasks = 0
-
-        for project in projects:
-            p_tasks = Task.objects.all().filter(project=project)
-            for p_task in p_tasks:
-                if p_task.status:
-                    done_tasks += 1
 
         context = {
             "tasks": tasks,
