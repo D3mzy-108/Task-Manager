@@ -98,7 +98,7 @@
     </div>
     <div class="project d-flex">
         <a href="{% url 'project_tasks' project.id %}" class="text-secondary text-decoration-none px-3 py-2"><i
-                class="fa fa-list me-2"></i> {{done_tasks}}/{{project.tasks.count}} tasks completed</a>
+                class="fa fa-list me-2"></i> {{project.tasks.count}} tasks completed</a>
 
         <a href="#" class="ms-auto px-3 py-2 delete_btn" data-bs-toggle="modal" data-bs-target="#delete_project{{project.id}}"><i
                 class="fa fa-trash text-secondary"></i></a>
